@@ -87,4 +87,4 @@ jobs:
         if: github.ref == 'refs/heads/main' # This ensures the step runs only for PRs to `main`
         with:
           push: true
-          tags: LeonardoSofiati/neoway-tech-case:latest
+          tags: leosofiati/neoway-tech-case:latest
