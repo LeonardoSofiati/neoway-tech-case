@@ -1,6 +1,9 @@
 name: ci-golang-workflow
 
 on:
+  push:
+    branches:
+      - develop
   pull_request:
     branches:
       - develop
@@ -51,7 +54,7 @@ jobs:
           go test ./internal/domain/customer/entity/... \
                   ./internal/domain/customer/service/... \
                   ./internal/infrastructure/api/handlers/... \
-                  ./internal/infrastructure/api/database/repository/... \
+                  ./internal/infrastructure/database/repository/... \
                   ./internal/usecase/customer/create/... \
                   ./internal/usecase/customer/delete/... \
                   ./internal/usecase/customer/find/... \
