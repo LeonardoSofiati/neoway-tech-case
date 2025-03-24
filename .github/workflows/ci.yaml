@@ -1,0 +1,89 @@
+name: ci-golang-workflow
+
+on:
+  push:
+    branches:
+      - develop
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  check-application:
+    runs-on: ubuntu-latest
+
+    services:
+      db:
+        image: postgres:13
+        env:
+          POSTGRES_DB: neoway_dev
+          POSTGRES_USER: neoway_dev
+          POSTGRES_PASSWORD: password
+          POSTGRES_FULL_URL: host=db user=neoway_dev password=password dbname=neoway_dev port=5432 sslmode=disable TimeZone=America/Sao_Paulo
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U neoway_dev -d neoway_dev"
+          --health-interval 10s
+          --health-timeout 5s
+          --health-retries 5
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v2
+
+      - name: Set up Go
+        uses: actions/setup-go@v5
+        with:
+          go-version: 1.21.1
+
+      - name: Install dependencies
+        run: go mod tidy
+
+      - name: Wait for Database
+        run: |
+          until pg_isready -h localhost -p 5432 -U neoway_dev; do
+            echo "Waiting for Postgres..."
+            sleep 5
+          done
+          echo "Postgres is up and running"
+
+      - name: Run tests
+        run: |
+          go test ./internal/domain/customer/entity/... \
+                  ./internal/domain/customer/service/... \
+                  ./internal/infrastructure/api/handlers/... \
+                  ./internal/infrastructure/database/repository/... \
+                  ./internal/usecase/customer/create/... \
+                  ./internal/usecase/customer/delete/... \
+                  ./internal/usecase/customer/find/... \
+                  -coverprofile=coverage.out -v
+
+      - name: Generate Swagger docs
+        run: |
+          go install github.com/swaggo/swag/cmd/swag@latest
+          swag init --output docs --dir ./cmd/api,./internal/infrastructure/api/handlers,./internal/domain/customer/dto
+
+      - name: Build application
+        run: go build -o api ./cmd/api/main.go
+
+      # Docker actions only for PRs to 'main' branch
+      - name: Set up QEMU
+        uses: docker/setup-qemu-action@v1
+
+      - name: Set up Docker Buildx
+        uses: docker/setup-buildx-action@v1
+
+      - name: Login to DockerHub
+        uses: docker/login-action@v1
+        with:
+          username: ${{ secrets.DOCKERHUB_USERNAME }}
+          password: ${{ secrets.DOCKERHUB_TOKEN }}
+
+      - name: Build and push Docker image
+        id: docker_build
+        uses: docker/build-push-action@v2
+        if: github.event.pull_request.base.ref == 'main'  # This ensures the step runs only for PRs to `main`
+        with:
+          push: true
+          tags: leosofiati/neoway-tech-case:latest

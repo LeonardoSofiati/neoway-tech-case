@@ -110,6 +110,29 @@ swag init --output docs --dir ./cmd/api,./internal/infrastructure/api/handlers,.
 go run cmd/api/main.go
 ```
 
+## Estrutura da Tabela `Customer`
+A API contém uma entidade chamada `Customer`, que representa informações de clientes na base de dados.
+
+### **Estrutura do Banco de Dados**
+Abaixo está a estrutura da tabela `customers`, baseada no código da entidade `Customer`:
+
+| Coluna                        | Tipo              | Restrições               | Descrição |
+|--------------------------------|-------------------|--------------------------|-----------|
+| `id`                          | `VARCHAR(50)`     | `PRIMARY KEY NOT NULL`   | Identificador único do cliente |
+| `created_at`                  | `TIMESTAMP`       | `NOT NULL`               | Data de criação do registro |
+| `cpf`                         | `VARCHAR(20)`     | `NOT NULL`               | CPF do cliente |
+| `cpf_valido`                  | `BOOLEAN`         | `NOT NULL`               | Indica se o CPF é válido |
+| `private`                     | `VARCHAR`         |                          | Informação privada |
+| `incompleto`                  | `VARCHAR`         |                          | Status de informação incompleta |
+| `data_ultima_compra`          | `TIMESTAMP`       |                          | Data da última compra |
+| `ticket_medio`                | `NUMERIC(10,2)`   |                          | Valor médio gasto pelo cliente |
+| `ticket_ultima_compra`        | `NUMERIC(10,2)`   |                          | Valor da última compra realizada |
+| `loja_mais_frequente`         | `VARCHAR(20)`     |                          | Identificador da loja mais frequentada |
+| `cnpj_loja_mais_frequente_valido` | `BOOLEAN`    | `NOT NULL`               | Indica se o CNPJ da loja mais frequente é válido |
+| `loja_ultima_compra`          | `VARCHAR(20)`     |                          | Identificador da loja onde foi feita a última compra |
+| `cnpj_loja_ultima_compra_valido`  | `BOOLEAN`    | `NOT NULL`               | Indica se o CNPJ da loja da última compra é válido |
+
+
 ---
 Desenvolvido por [Leonardo Sofiati Buscariolo](https://github.com/seu-usuario) 🚀
 
