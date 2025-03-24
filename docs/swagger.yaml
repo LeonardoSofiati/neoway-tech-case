@@ -1,0 +1,265 @@
+basePath: /
+definitions:
+  dto.InputCreateCustomerDto:
+    properties:
+      cpf:
+        type: string
+      dataUltimaCompra:
+        type: string
+      incompleto:
+        type: string
+      lojaMaisFrequente:
+        type: string
+      lojaUltimaCompra:
+        type: string
+      private:
+        type: string
+      ticketMedio:
+        type: number
+      ticketUltimaCompra:
+        type: number
+    type: object
+  dto.OutputGetCustomerDto:
+    properties:
+      cnpj_loja_mais_frequente_valido:
+        type: boolean
+      cnpj_loja_ultima_compra_valido:
+        type: boolean
+      cpf:
+        type: string
+      cpf_valido:
+        type: boolean
+      created_at:
+        type: string
+      data_ultima_compra:
+        type: string
+      id:
+        type: string
+      incompleto:
+        type: string
+      loja_mais_frequente:
+        type: string
+      loja_ultima_compra:
+        type: string
+      private:
+        type: string
+      ticket_medio:
+        type: number
+      ticket_ultima_compra:
+        type: number
+    type: object
+  dto.OutputGetCustomersListDto:
+    properties:
+      cnpj_loja_mais_frequente_valido:
+        type: boolean
+      cnpj_loja_ultima_compra_valido:
+        type: boolean
+      cpf:
+        type: string
+      cpf_valido:
+        type: boolean
+      created_at:
+        type: string
+      data_ultima_compra:
+        type: string
+      id:
+        type: string
+      incompleto:
+        type: string
+      loja_mais_frequente:
+        type: string
+      loja_ultima_compra:
+        type: string
+      private:
+        type: string
+      ticket_medio:
+        type: number
+      ticket_ultima_compra:
+        type: number
+    type: object
+externalDocs:
+  description: OpenAPI
+  url: https://swagger.io/resources/open-api/
+host: localhost:8080
+info:
+  contact:
+    email: support@swagger.io
+    name: API Support
+    url: http://www.swagger.io/support
+  description: Documentation for Neoway test API.
+  license:
+    name: Apache 2.0
+    url: http://www.apache.org/licenses/LICENSE-2.0.html
+  termsOfService: http://swagger.io/terms/
+  title: Neoway recruitment process tech test
+  version: "1.0"
+paths:
+  /api/v1/customer:
+    get:
+      consumes:
+      - application/json
+      description: Get a paginated list of customers
+      parameters:
+      - default: 1
+        description: Page number
+        in: query
+        name: page
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/dto.OutputGetCustomersListDto'
+            type: array
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: List all customers
+      tags:
+      - Customers
+    post:
+      consumes:
+      - application/json
+      description: Create a new customer with the provided details
+      parameters:
+      - description: Customer data
+        in: body
+        name: input
+        required: true
+        schema:
+          $ref: '#/definitions/dto.InputCreateCustomerDto'
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Create a new customer
+      tags:
+      - Customers
+  /api/v1/customer/{id}:
+    delete:
+      consumes:
+      - application/json
+      description: Delete a customer by ID
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: Customer successfully deleted
+          schema:
+            type: string
+        "404":
+          description: Customer not found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Delete a customer
+      tags:
+      - Customers
+  /api/v1/customer/bulkCreation:
+    post:
+      consumes:
+      - multipart/form-data
+      description: Create multiple customers from a provided file
+      parameters:
+      - description: CSV file with customer data
+        in: formData
+        name: file
+        required: true
+        type: file
+      produces:
+      - application/json
+      responses:
+        "400":
+          description: Bad Request
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Create multiple customers in bulk
+      tags:
+      - Customers
+  /api/v1/customer/getByCpf/{cpf}:
+    get:
+      consumes:
+      - application/json
+      description: Get details of a customer by CPF
+      parameters:
+      - description: Customer CPF
+        in: path
+        name: cpf
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.OutputGetCustomerDto'
+        "404":
+          description: Customer not found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get customer details by CPF
+      tags:
+      - Customers
+  /api/v1/customer/getById/{id}:
+    get:
+      consumes:
+      - application/json
+      description: Get details of a customer by ID
+      parameters:
+      - description: Customer ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/dto.OutputGetCustomerDto'
+        "404":
+          description: Customer not found
+          schema:
+            type: string
+        "500":
+          description: Internal Server Error
+          schema:
+            type: string
+      summary: Get customer details by ID
+      tags:
+      - Customers
+swagger: "2.0"

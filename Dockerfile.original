@@ -1,0 +1,21 @@
+# Build stage
+FROM golang:latest AS builder
+
+WORKDIR /app
+
+COPY . .
+
+RUN CGO_ENABLED=0 GOOS=linux GOARCH=amd64 go build -o api ./cmd/api/main.go
+
+# Final stage
+FROM alpine:latest
+
+# RUN apk --no-cache add ca-certificates
+
+RUN apk --no-cache add tzdata
+
+ENV TZ=America/Sao_Paulo
+
+COPY --from=builder /app/api /
+
+CMD ["./api"]

@@ -1,0 +1,37 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:13
+    container_name: postgres_db
+    restart: always
+    environment:
+      DB_HOST: db
+      POSTGRES_DB: neoway_dev
+      POSTGRES_USER: neoway_dev
+      POSTGRES_PASSWORD: password
+      POSTGRES_FULL_URL: host=db user=neoway_dev password=password dbname=neoway_dev port=5432 sslmode=disable TimeZone=America/Sao_Paulo
+
+    ports:
+      - "5432:5432"
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+
+  api:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    depends_on:
+      - db
+    environment:
+      - DB_HOST=db
+      - DB_USER=neoway_dev
+      - DB_PASSWORD=password
+      - DB_NAME=neoway_dev
+      - POSTGRES_FULL_URL=host=db user=neoway_dev password=password dbname=neoway_dev port=5432 sslmode=disable TimeZone=America/Sao_Paulo
+
+    ports:
+      - "8080:8080"
+
+volumes:
+  pgdata:

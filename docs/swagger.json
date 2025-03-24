@@ -1,0 +1,400 @@
+{
+    "swagger": "2.0",
+    "info": {
+        "description": "Documentation for Neoway test API.",
+        "title": "Neoway recruitment process tech test",
+        "termsOfService": "http://swagger.io/terms/",
+        "contact": {
+            "name": "API Support",
+            "url": "http://www.swagger.io/support",
+            "email": "support@swagger.io"
+        },
+        "license": {
+            "name": "Apache 2.0",
+            "url": "http://www.apache.org/licenses/LICENSE-2.0.html"
+        },
+        "version": "1.0"
+    },
+    "host": "localhost:8080",
+    "basePath": "/",
+    "paths": {
+        "/api/v1/customer": {
+            "get": {
+                "description": "Get a paginated list of customers",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "List all customers",
+                "parameters": [
+                    {
+                        "type": "integer",
+                        "default": 1,
+                        "description": "Page number",
+                        "name": "page",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/dto.OutputGetCustomersListDto"
+                            }
+                        }
+                    },
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            },
+            "post": {
+                "description": "Create a new customer with the provided details",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Create a new customer",
+                "parameters": [
+                    {
+                        "description": "Customer data",
+                        "name": "input",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/dto.InputCreateCustomerDto"
+                        }
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/customer/bulkCreation": {
+            "post": {
+                "description": "Create multiple customers from a provided file",
+                "consumes": [
+                    "multipart/form-data"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Create multiple customers in bulk",
+                "parameters": [
+                    {
+                        "type": "file",
+                        "description": "CSV file with customer data",
+                        "name": "file",
+                        "in": "formData",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "400": {
+                        "description": "Bad Request",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/customer/getByCpf/{cpf}": {
+            "get": {
+                "description": "Get details of a customer by CPF",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Get customer details by CPF",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Customer CPF",
+                        "name": "cpf",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.OutputGetCustomerDto"
+                        }
+                    },
+                    "404": {
+                        "description": "Customer not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/customer/getById/{id}": {
+            "get": {
+                "description": "Get details of a customer by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Get customer details by ID",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Customer ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/dto.OutputGetCustomerDto"
+                        }
+                    },
+                    "404": {
+                        "description": "Customer not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/api/v1/customer/{id}": {
+            "delete": {
+                "description": "Delete a customer by ID",
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Customers"
+                ],
+                "summary": "Delete a customer",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Customer ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "Customer successfully deleted",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "404": {
+                        "description": "Customer not found",
+                        "schema": {
+                            "type": "string"
+                        }
+                    },
+                    "500": {
+                        "description": "Internal Server Error",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        }
+    },
+    "definitions": {
+        "dto.InputCreateCustomerDto": {
+            "type": "object",
+            "properties": {
+                "cpf": {
+                    "type": "string"
+                },
+                "dataUltimaCompra": {
+                    "type": "string"
+                },
+                "incompleto": {
+                    "type": "string"
+                },
+                "lojaMaisFrequente": {
+                    "type": "string"
+                },
+                "lojaUltimaCompra": {
+                    "type": "string"
+                },
+                "private": {
+                    "type": "string"
+                },
+                "ticketMedio": {
+                    "type": "number"
+                },
+                "ticketUltimaCompra": {
+                    "type": "number"
+                }
+            }
+        },
+        "dto.OutputGetCustomerDto": {
+            "type": "object",
+            "properties": {
+                "cnpj_loja_mais_frequente_valido": {
+                    "type": "boolean"
+                },
+                "cnpj_loja_ultima_compra_valido": {
+                    "type": "boolean"
+                },
+                "cpf": {
+                    "type": "string"
+                },
+                "cpf_valido": {
+                    "type": "boolean"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "data_ultima_compra": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "incompleto": {
+                    "type": "string"
+                },
+                "loja_mais_frequente": {
+                    "type": "string"
+                },
+                "loja_ultima_compra": {
+                    "type": "string"
+                },
+                "private": {
+                    "type": "string"
+                },
+                "ticket_medio": {
+                    "type": "number"
+                },
+                "ticket_ultima_compra": {
+                    "type": "number"
+                }
+            }
+        },
+        "dto.OutputGetCustomersListDto": {
+            "type": "object",
+            "properties": {
+                "cnpj_loja_mais_frequente_valido": {
+                    "type": "boolean"
+                },
+                "cnpj_loja_ultima_compra_valido": {
+                    "type": "boolean"
+                },
+                "cpf": {
+                    "type": "string"
+                },
+                "cpf_valido": {
+                    "type": "boolean"
+                },
+                "created_at": {
+                    "type": "string"
+                },
+                "data_ultima_compra": {
+                    "type": "string"
+                },
+                "id": {
+                    "type": "string"
+                },
+                "incompleto": {
+                    "type": "string"
+                },
+                "loja_mais_frequente": {
+                    "type": "string"
+                },
+                "loja_ultima_compra": {
+                    "type": "string"
+                },
+                "private": {
+                    "type": "string"
+                },
+                "ticket_medio": {
+                    "type": "number"
+                },
+                "ticket_ultima_compra": {
+                    "type": "number"
+                }
+            }
+        }
+    },
+    "externalDocs": {
+        "description": "OpenAPI",
+        "url": "https://swagger.io/resources/open-api/"
+    }
+}
